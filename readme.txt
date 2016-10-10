@@ -1,26 +1,13 @@
-2048ÓÎÏ·
+2048æŠ€æœ¯åˆ†æžï¼š
+1.	æ¸¸æˆé€»è¾‘
+2.	æŠ€æœ¯
+	a)	Html
+	b)	Css
+	c)	JavaScript
+	d)	jQuery
+	e)	ç¾Žæœ¯
+3.	åˆ›æ„
 
-1.1 ËùÐè¼¼Êõ
-	ÓÎÏ·Âß¼­
-	¼¼Êõ	
-		HTML
-		css
-		JavaScript
-		jQuery
-		
-		ÃÀÊõ
-		
-1.2 ÓÎÏ·¼Ü¹¹MVC
-	
-	1.UI					M
-		HTML/CSS
-		
-	2.Ö÷Âß¼­				V
-		js/jquery
-		
-		¶¯»­Ð§¹ûÂß¼­
-			js/jquery
-		Ö§³ÅÂß¼­
-			js
-			
-	3.ÓÎÏ·Êý¾Ý			C
+2048æ¸¸æˆæž¶æž„:
+ä½¿ç”¨é¢å‘è¿‡ç¨‹çš„å¼€å‘
+

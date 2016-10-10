@@ -3,13 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>2048</title>
-	<link rel="stylesheet" href="2048.css">
+	<link rel="stylesheet" href="css/2048.css">
 	<!-- 引入jQuery -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
-
-	<script type="text/javascript" src="support2048.js"></script>
-	<script type="text/javascript" src="showAnimation2048.js"></script>
-	<script type="text/javascript" src="main2048.js"></script>
+	<!-- 支撑逻辑 -->
+	<script type="text/javascript" src="js/support2048.js"></script>
+	<!-- 动画效果逻辑 -->
+	<script type="text/javascript" src="js/showAnimation2048.js"></script>
+	<!-- 主逻辑 -->
+	<script type="text/javascript" src="js/main2048.js"></script>
 
 </head>
 <body>
@@ -24,7 +26,9 @@
 	<!-- header结束 -->
 
 	<!-- 主体部分开始 -->
+		<!-- 棋盘格 -->
 	<div id="grid-container">
+		<!-- 每个小格子 -->
 		<div class="grid-cell" id="grid-cell-0-0"></div>
 		<div class="grid-cell" id="grid-cell-0-1"></div>
 		<div class="grid-cell" id="grid-cell-0-2"></div>
