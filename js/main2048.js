@@ -139,6 +139,7 @@ function moveLeft() {
 	for (var i = 0; i<4; i++) {
 		for(var j = 1; j < 4; j ++){
 			if (board[i][j]!=0) {
+				// k 代表目的位置
 				for(var k=0;k<j;k++){
 					if (board[i][k]==0&&noBlockHorizontal(i,k,j,board)) {
 						//move
@@ -152,6 +153,37 @@ function moveLeft() {
 						//add
 						board[i][k]+=board[i][j];
 						board[i][j]=0;
+						continue;
+					}
+				}
+			}
+		}
+	}
+	updateBoardView();
+	return true;
+}
+// 向上移动
+function moveUp() {
+	if (!canMoveUp(board)) {
+		return false;
+	}
+	// moveUp
+	for(var i = 1;i<4;i++){
+		for(var j =0;j<4;j++){
+			if (board[i][j]!=0) {
+				for(var k = 0;k<i;k++){
+					if (board[k][j]==0&&noBlockVertical(i,k,j,board)) {
+						// move
+						showMoveAnimation(i,j,k,j);
+						board[k][j]=board[i][j];
+						board[i][j]=0;
+						continue;
+					}else if(board[k][j]==board[i][j]&&noBlockVertical(i,k,j,board)){
+						// move
+						showMoveAnimation(i,j,k,j);
+						board[k][j]+=board[i][j];
+						board[i][j]=0;
+						// add
 						continue;
 					}
 				}
