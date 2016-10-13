@@ -95,8 +95,8 @@ function generateOneNumber() {
 }
 //游戏向左右上下移动
 $(document).keydown(function (event) {
-	var keyCode = event.keyCode;
-	switch(event,keyCode){
+	// event.keyCode
+	switch(event.keyCode){
 		case 37://left
 			if (moveLeft()) {//判断是否可以向左移动
 				generateOneNumber();//生成新的随机数
@@ -141,13 +141,13 @@ function moveLeft() {
 			if (board[i][j]!=0) {
 				// k 代表目的位置
 				for(var k=0;k<j;k++){
-					if (board[i][k]==0&&noBlockHorizontal(i,k,j,board)) {
+					if (board[i][k]==0&&noBlockHorizontalLeft(i,k,j,board)) {
 						//move
 						showMoveAnimation(i,j,i,k);
 						board[i][k] = board[i][j];
 						board[i][j] = 0;
 						continue;
-					}else if(board[i][k]==board[i][j]&&noBlockHorizontal(i,k,j,board)){
+					}else if(board[i][k]==board[i][j]&&noBlockHorizontalLeft(i,k,j,board)){
 						//move
 						showMoveAnimation(i,j,i,k);
 						//add
@@ -159,7 +159,7 @@ function moveLeft() {
 			}
 		}
 	}
-	updateBoardView();
+	setTimeout("updateBoardView()",200);
 	return true;
 }
 // 向上移动
@@ -172,13 +172,13 @@ function moveUp() {
 		for(var j =0;j<4;j++){
 			if (board[i][j]!=0) {
 				for(var k = 0;k<i;k++){
-					if (board[k][j]==0&&noBlockVertical(i,k,j,board)) {
+					if (board[k][j]==0&&noBlockVerticalUp(i,k,j,board)) {
 						// move
 						showMoveAnimation(i,j,k,j);
 						board[k][j]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if(board[k][j]==board[i][j]&&noBlockVertical(i,k,j,board)){
+					}else if(board[k][j]==board[i][j]&&noBlockVerticalUp(i,k,j,board)){
 						// move
 						showMoveAnimation(i,j,k,j);
 						board[k][j]+=board[i][j];
@@ -190,6 +190,67 @@ function moveUp() {
 			}
 		}
 	}
-	updateBoardView();
+	setTimeout("updateBoardView()",200);
+	return true;
+}
+// 向右移动
+function moveRight() {
+	if (!canMoveRight()) {
+		return false;
+	}
+	// moveRight
+	for(var i = 0; i < 4;i++){
+		for(var j = 0; j <3;j++){
+			if (board[i][j]!=0) {
+				for(var k = 3;k>j;k--){
+					if (board[i][k]==0&&noBlockHorizontalRight(i,k,j,board)) {
+						// move
+						showMoveAnimation(i,j,i,k);
+						board[i][k]=board[i][j];
+						board[i][j]=0;
+						continue;
+					}else if (board[i][k]==board[i][j]&&noBlockHorizontalRight(i,k,j,board)) {
+						// move
+						showMoveAnimation(i,j,i,k);
+						// add
+						board[i][k]+=board[i][j];
+						board[i][j]=0;
+						continue;
+					}
+				}
+			}
+		}
+	}
+	setTimeout("updateBoardView()",200);
+	return true;
+}
+function moveDown() {
+	if (!canMoveDown()) {
+		return false;
+	}
+	// moveDown
+	for (var i = 0; i < 3; i++) {
+		for(var j = 0; j<4; j++){
+			if (board[i][j]!=0) {
+				for(var k = 3;k>i;k--){
+					if (board[k][j]==0&&noBlockVerticalDown(i,k,j,board)) {
+						// move
+						showMoveAnimation(i,j,k,j);
+						board[k][j]=board[i][j];
+						board[i][j]=0;
+						continue;
+					}else if (board[k][j]==board[i][j]&&noBlockVerticalDown(i,k,j,board)) {
+						//move
+						showMoveAnimation(i,j,k,j);
+						board[k][j]+=board[i][j];
+						board[i][j]=0;
+						//add
+						continue;
+					}
+				}
+			}
+		}
+	}
+	setTimeout("updateBoardView()",200);
 	return true;
 }
