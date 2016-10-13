@@ -3,6 +3,8 @@
 var board = new Array();
 // 分数
 var score = 0;
+// 去掉叠加bug
+var	hasConflicted = new Array();
 
 $(document).ready(function () {
 	newgame();
@@ -29,9 +31,13 @@ function init() {
 	// 将board声明为二维数组
 	for (var i = 0; i < 4; i++) {
 		board[i]=new Array();
+		// 将hasConflicted声明为二维数组
+		hasConflicted[i] = new Array();
+
 		// 初始化每一项
 		for (var j = 0; j < 4; j++) {
 			board[i][j] = 0;
+			hasConflicted[i][j]=false;
 		}
 	}
 
@@ -70,6 +76,8 @@ function updateBoardView() {
 				});
 				theNumberCell.text(board[i][j]);
 			}
+
+			hasConflicted[i][j] =false;
 		}
 	}
 }
@@ -130,9 +138,7 @@ $(document).keydown(function (event) {
 	}
 });
 
-function isgameover() {
-	
-}
+
 // 向左移动
 function moveLeft() {
 	if (!canMoveLeft(board)) {
@@ -151,7 +157,8 @@ function moveLeft() {
 						board[i][k] = board[i][j];
 						board[i][j] = 0;
 						continue;
-					}else if(board[i][k]==board[i][j]&&noBlockHorizontal(i,k,j,board)){
+						//添加hasConflicted判断在i，k位置是否发生过碰撞
+					}else if(board[i][k]==board[i][j]&&noBlockHorizontal(i,k,j,board)&&!hasConflicted[i][k]){
 						//move
 						showMoveAnimation(i,j,i,k);
 						//add
@@ -159,6 +166,9 @@ function moveLeft() {
 						board[i][j]=0;
 						score+=board[i][k];
 						updateScore(score);
+
+						hasConflicted[i][k]=true;
+
 						continue;
 					}
 				}
@@ -184,7 +194,7 @@ function moveUp() {
 						board[k][j]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if(board[k][j]==board[i][j]&&noBlockVertical(i,k,j,board)){
+					}else if(board[k][j]==board[i][j]&&noBlockVertical(i,k,j,board)&&!hasConflicted[k][j]){
 						// move
 						showMoveAnimation(i,j,k,j);
 						board[k][j]+=board[i][j];
@@ -192,6 +202,9 @@ function moveUp() {
 						// add
 						score+=board[k][j];
 						updateScore(score);
+
+						hasConflicted[k][j]=true;
+
 						continue;
 					}
 				}
@@ -208,7 +221,7 @@ function moveRight() {
 	}
 	// moveRight
 	for(var i = 0; i < 4;i++){
-		for(var j = 0; j <3;j++){
+		for(var j = 2; j >=0;j--){
 			if (board[i][j]!=0) {
 				for(var k = 3;k>j;k--){
 					if (board[i][k]==0&&noBlockHorizontal(i,j,k,board)) {
@@ -217,7 +230,7 @@ function moveRight() {
 						board[i][k]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if (board[i][k]==board[i][j]&&noBlockHorizontal(i,j,k,board)) {
+					}else if (board[i][k]==board[i][j]&&noBlockHorizontal(i,j,k,board)&&!hasConflicted[i][k]) {
 						// move
 						showMoveAnimation(i,j,i,k);
 						// add
@@ -225,6 +238,9 @@ function moveRight() {
 						board[i][j]=0;
 						score+=board[i][k];
 						updateScore(score);
+
+						hasConflicted[i][k]=true;
+
 						continue;
 					}
 				}
@@ -239,7 +255,8 @@ function moveDown() {
 		return false;
 	}
 	// moveDown
-	for (var i = 0; i < 3; i++) {
+		// i要递减循环，否则会出现bug：离右边比较远的格子无法移动到预期位置
+	for (var i = 2; i >=0; i--) {
 		for(var j = 0; j<4; j++){
 			if (board[i][j]!=0) {
 				for(var k = 3;k>i;k--){
@@ -249,7 +266,7 @@ function moveDown() {
 						board[k][j]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if (board[k][j]==board[i][j]&&noBlockVertical(k,i,j,board)) {
+					}else if (board[k][j]==board[i][j]&&noBlockVertical(k,i,j,board)&&!hasConflicted[k][j]) {
 						//move
 						showMoveAnimation(i,j,k,j);
 						//add
@@ -258,6 +275,9 @@ function moveDown() {
 						
 						score+=board[k][j];
 						updateScore(score);
+
+						hasConflicted[k][j]=true;
+
 						continue;
 					}
 				}
@@ -267,12 +287,13 @@ function moveDown() {
 	setTimeout("updateBoardView()",200);
 	return true;
 }
-
+// 判断游戏是否结束
 function isgameover() {
 	if (nospace(board)&&nomove(board)) {
 		gameover();
 	}
 }
+// 游戏结束弹出gameover
 function gameover() {
 	alert("gameover!");
 }

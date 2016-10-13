@@ -132,7 +132,7 @@ function noBlockVertical(row2,row1,col,board) {
 // 	return true;
 // }
 
-
+// 不能进行任何的移动操作
 function nomove(board) {
 	if (canMoveLeft(board)||canMoveRight(board)||canMoveUp(board)||canMoveDown(board)) {
 		return true;
