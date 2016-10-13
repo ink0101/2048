@@ -37,6 +37,10 @@ function init() {
 
 	//调用updateBoardView()函数，通知前端更新数据
 	updateBoardView();
+
+	score = 0;
+
+	updateScore(score);
 }
 // 根据board的值对前端的number-cell元素进行操作
 // 用户每一次操作board值都会发生变化，都要调用这个函数
@@ -99,26 +103,26 @@ $(document).keydown(function (event) {
 	switch(event.keyCode){
 		case 37://left
 			if (moveLeft()) {//判断是否可以向左移动
-				generateOneNumber();//生成新的随机数
-				isgameover();//判断游戏是否结束
+				setTimeout("generateOneNumber()",210);//生成新的随机数
+				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		case 38://up
 			if (moveUp()) {
-				generateOneNumber();
-				isgameover();
+				setTimeout("generateOneNumber()",210);//生成新的随机数
+				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		case 39://right
 			if (moveRight()) {
-				generateOneNumber();
-				isgameover();
+				setTimeout("generateOneNumber()",210);//生成新的随机数
+				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		case 40://down
 			if (moveDown()) {
-				generateOneNumber();
-				isgameover();
+				setTimeout("generateOneNumber()",210);//生成新的随机数
+				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		default://default
@@ -141,18 +145,20 @@ function moveLeft() {
 			if (board[i][j]!=0) {
 				// k 代表目的位置
 				for(var k=0;k<j;k++){
-					if (board[i][k]==0&&noBlockHorizontalLeft(i,k,j,board)) {
+					if (board[i][k]==0&&noBlockHorizontal(i,k,j,board)) {
 						//move
 						showMoveAnimation(i,j,i,k);
 						board[i][k] = board[i][j];
 						board[i][j] = 0;
 						continue;
-					}else if(board[i][k]==board[i][j]&&noBlockHorizontalLeft(i,k,j,board)){
+					}else if(board[i][k]==board[i][j]&&noBlockHorizontal(i,k,j,board)){
 						//move
 						showMoveAnimation(i,j,i,k);
 						//add
 						board[i][k]+=board[i][j];
 						board[i][j]=0;
+						score+=board[i][k];
+						updateScore(score);
 						continue;
 					}
 				}
@@ -172,18 +178,20 @@ function moveUp() {
 		for(var j =0;j<4;j++){
 			if (board[i][j]!=0) {
 				for(var k = 0;k<i;k++){
-					if (board[k][j]==0&&noBlockVerticalUp(i,k,j,board)) {
+					if (board[k][j]==0&&noBlockVertical(i,k,j,board)) {
 						// move
 						showMoveAnimation(i,j,k,j);
 						board[k][j]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if(board[k][j]==board[i][j]&&noBlockVerticalUp(i,k,j,board)){
+					}else if(board[k][j]==board[i][j]&&noBlockVertical(i,k,j,board)){
 						// move
 						showMoveAnimation(i,j,k,j);
 						board[k][j]+=board[i][j];
 						board[i][j]=0;
 						// add
+						score+=board[k][j];
+						updateScore(score);
 						continue;
 					}
 				}
@@ -203,18 +211,20 @@ function moveRight() {
 		for(var j = 0; j <3;j++){
 			if (board[i][j]!=0) {
 				for(var k = 3;k>j;k--){
-					if (board[i][k]==0&&noBlockHorizontalRight(i,k,j,board)) {
+					if (board[i][k]==0&&noBlockHorizontal(i,j,k,board)) {
 						// move
 						showMoveAnimation(i,j,i,k);
 						board[i][k]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if (board[i][k]==board[i][j]&&noBlockHorizontalRight(i,k,j,board)) {
+					}else if (board[i][k]==board[i][j]&&noBlockHorizontal(i,j,k,board)) {
 						// move
 						showMoveAnimation(i,j,i,k);
 						// add
 						board[i][k]+=board[i][j];
 						board[i][j]=0;
+						score+=board[i][k];
+						updateScore(score);
 						continue;
 					}
 				}
@@ -233,18 +243,21 @@ function moveDown() {
 		for(var j = 0; j<4; j++){
 			if (board[i][j]!=0) {
 				for(var k = 3;k>i;k--){
-					if (board[k][j]==0&&noBlockVerticalDown(i,k,j,board)) {
+					if (board[k][j]==0&&noBlockVertical(k,i,j,board)) {
 						// move
 						showMoveAnimation(i,j,k,j);
 						board[k][j]=board[i][j];
 						board[i][j]=0;
 						continue;
-					}else if (board[k][j]==board[i][j]&&noBlockVerticalDown(i,k,j,board)) {
+					}else if (board[k][j]==board[i][j]&&noBlockVertical(k,i,j,board)) {
 						//move
 						showMoveAnimation(i,j,k,j);
+						//add
 						board[k][j]+=board[i][j];
 						board[i][j]=0;
-						//add
+						
+						score+=board[k][j];
+						updateScore(score);
 						continue;
 					}
 				}
@@ -253,4 +266,13 @@ function moveDown() {
 	}
 	setTimeout("updateBoardView()",200);
 	return true;
+}
+
+function isgameover() {
+	if (nospace(board)&&nomove(board)) {
+		gameover();
+	}
+}
+function gameover() {
+	alert("gameover!");
 }

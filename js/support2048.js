@@ -96,7 +96,7 @@ function canMoveDown() {
 	return false;
 }
 // 判断水平向左路径上是否有障碍物
-function noBlockHorizontalLeft(row,col1,col2,board) {
+function noBlockHorizontal(row,col1,col2,board) {
 	for(var i = col1+1;i<col2;i++){
 		if (board[row][i]!=0) {
 			return false;
@@ -105,16 +105,16 @@ function noBlockHorizontalLeft(row,col1,col2,board) {
 	return true;
 }
 // 判断水平向右路径上是否有障碍物
-function noBlockHorizontalRight(row,col1,col2,board) {
-	for(var i = col1-1;i>col2;i--){
-		if (board[row][i]!=0) {
-			return false;
-		}
-	}
-	return true;
-}
+// function noBlockHorizontalRight(row,col1,col2,board) {
+// 	for(var i = col1-1;i>col2;i--){
+// 		if (board[row][i]!=0) {
+// 			return false;
+// 		}
+// 	}
+// 	return true;
+// }
 // 判断垂直向上路径上是否有障碍物
-function noBlockVerticalUp(row2,row1,col,board) {
+function noBlockVertical(row2,row1,col,board) {
 	for(var i = row1+1;i<row2;i++){
 		if (board[i][col]!=0) {
 			return false;
@@ -122,11 +122,20 @@ function noBlockVerticalUp(row2,row1,col,board) {
 	}
 	return true;
 }
-function noBlockVerticalDown(row2,row1,col,board) {
-	for(var i = row1-1;i>row2;i--){
-		if (board[i][col]!=0) {
-			return false;
-		}
+
+// function noBlockVerticalDown(row2,row1,col,board) {
+// 	for(var i = row1-1;i>row2;i--){
+// 		if (board[i][col]!=0) {
+// 			return false;
+// 		}
+// 	}
+// 	return true;
+// }
+
+
+function nomove(board) {
+	if (canMoveLeft(board)||canMoveRight(board)||canMoveUp(board)||canMoveDown(board)) {
+		return true;
 	}
-	return true;
+	return false;
 }
