@@ -91,12 +91,27 @@ function generateOneNumber() {
 	var randx = parseInt(Math.floor(Math.random()*4));
 	var randy = parseInt(Math.floor(Math.random()*4));
 	// 判断生成的位置是否可用
-	while(true){
+	
+	var times = 0;
+	while(times<50){
 		if (board[randx][randy]==0) {
 			break;
 		}
 		randx = parseInt(Math.floor(Math.random()*4));
 		randy = parseInt(Math.floor(Math.random()*4));
+
+		times++;
+	}
+	if (times==50) {
+		for (var i = 0; i < 4; i++) {
+			for(var j = 0; j < 4; j++){
+				if (board[i][j]==0) {
+					randx = i;
+					randy = j;
+				}
+			}
+			
+		}
 	}
 	// 随机生成一个数字
 	var randNumber =  Math.random()<0.5?2:4;
