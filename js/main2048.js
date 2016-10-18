@@ -5,10 +5,31 @@ var board = new Array();
 var score = 0;
 // 去掉叠加bug
 var	hasConflicted = new Array();
+// 定义触控坐标
+var startx = 0,starty = 0,endx = 0,endy = 0;
 
+// 游戏初始化
 $(document).ready(function () {
+	prepareForMobile();
 	newgame();
 });
+// 为移动端初始化界面
+function prepareForMobile() {
+	if (documentWidth>500) {
+		gridContainerWidth=500;
+		cellSideLength=100;
+		cellSpace=20;
+	}
+	$('#grid-container').css('width',gridContainerWidth - 2*cellSpace);
+	$('#grid-container').css('height',gridContainerWidth - 2*cellSpace);
+	$('#grid-container').css('padding',cellSpace);
+	$('#grid-container').css('border-radius',0.02*gridContainerWidth);
+
+	$('.grid-cell').css('width',cellSideLength);
+	$('.grid-cell').css('height',cellSideLength);
+	$('.grid-cell').css('border-radius',0.02*cellSideLength);
+	
+}
 
 function newgame() {
 	// 初始化棋盘格
@@ -62,13 +83,13 @@ function updateBoardView() {
 				theNumberCell.css({
 					'height':'0px',
 					'width':'0px',
-					'top':getPosTop(i,j)+50,
-					'left':getPosLeft(i,j)+50
+					'top':getPosTop(i,j)+cellSideLength/2,
+					'left':getPosLeft(i,j)+cellSideLength/2
 				});
 			}else{
 				theNumberCell.css({
-					'height':'100px',
-					'width':'100px',
+					'height':cellSideLength,
+					'width':cellSideLength,
 					'top':getPosTop(i,j),
 					'left':getPosLeft(i,j),
 					'background-color':getNumberBackgroundColor(board[i][j]),
@@ -80,6 +101,10 @@ function updateBoardView() {
 			hasConflicted[i][j] =false;
 		}
 	}
+	// 这里为什么要加px
+	$('.number-cell').css('line-height',cellSideLength+'px');
+	$('.number-cell').css('font-size',0.6*cellSideLength+'px');
+
 }
 // 生成随机数字
 function generateOneNumber() {
@@ -125,24 +150,28 @@ $(document).keydown(function (event) {
 	// event.keyCode
 	switch(event.keyCode){
 		case 37://left
+			event.preventDefault();
 			if (moveLeft()) {//判断是否可以向左移动
 				setTimeout("generateOneNumber()",210);//生成新的随机数
 				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		case 38://up
+			event.preventDefault();
 			if (moveUp()) {
 				setTimeout("generateOneNumber()",210);//生成新的随机数
 				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		case 39://right
+			event.preventDefault();
 			if (moveRight()) {
 				setTimeout("generateOneNumber()",210);//生成新的随机数
 				setTimeout("isgameover()",300);//判断游戏是否结束
 			}
 			break;
 		case 40://down
+			event.preventDefault();
 			if (moveDown()) {
 				setTimeout("generateOneNumber()",210);//生成新的随机数
 				setTimeout("isgameover()",300);//判断游戏是否结束
@@ -150,6 +179,61 @@ $(document).keydown(function (event) {
 			break;
 		default://default
 			break;
+	}
+});
+
+// 增加监听器，对触摸添加事件
+document.addEventListener('touchstart',function (event) {
+	startx = event.touches[0].pageX;
+	starty = event.touches[0].pageY;
+});
+document.addEventListener('touchmove',function (event) {
+	event.preventDefault();
+})
+document,addEventListener('touchend',function (event) {
+	endx = event.changedTouches[0].pageX;
+	endy = event.changedTouches[0].pageY;
+
+	var deltax = endx - startx;
+	var deltay = endy - starty;
+	// 增加判断去掉触碰也会发生滑动的bug
+	if ( Math.abs(deltax) < 0.1*documentWidth && Math.abs(deltay)< 0.1*documentWidth ) {
+		return;
+	}
+	// x方向滑动
+	if (Math.abs(deltax)>=Math.abs(deltay)) {
+
+		if (deltax>0) {
+			//move right
+			if (moveRight()) {
+				setTimeout("generateOneNumber()",210);
+				setTimeout("isgameover()",300);
+			}
+		}else{
+			// move left
+			if (moveLeft()) {
+				setTimeout("generateOneNumber()",210);
+				setTimeout("isgameover()",300);
+			}
+		}
+
+	// y方向滑动
+	}else{
+		if (deltay>0) {
+			// move down
+			if (moveDown()) {
+				setTimeout("generateOneNumber()",210);
+				setTimeout("isgameover()",300);
+			}
+		}else{
+			// move up
+			if (moveUp()) {
+				setTimeout("generateOneNumber()",210);
+				setTimeout("isgameover()",300);
+			}
+		}
+
+
 	}
 });
 

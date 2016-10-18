@@ -1,10 +1,18 @@
+// 获取屏幕的宽度
+documentWidth = window.screen.availWidth;
+// 定义游戏的大方块的宽度
+gridContainerWidth = 0.92*documentWidth;
+// 定义小方块的边长
+cellSideLength = 0.18*documentWidth;
+// 小方块之间的间距
+cellSpace = 0.04*documentWidth;
 // 获得top
 function getPosTop(i,j) {
-	return 20+i*120;
+	return cellSpace+i*(cellSpace+cellSideLength);
 }
 // 获得left
 function getPosLeft(i,j) {
-	return 20+j*120;
+	return cellSpace+j*(cellSpace+cellSideLength);
 }
 // 设置number-cell的背景色
 function getNumberBackgroundColor(number) {
